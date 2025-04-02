@@ -5,3 +5,10 @@ module "redis" {
   num_cache_nodes  = var.redis_num_nodes
 
 }
+
+module "vpc" {
+  source    = "./modules/vpc"
+  region    = var.region
+  vpc_cidr  = var.vpc_cidr
+  vpc_name  = var.vpc_name
+}
