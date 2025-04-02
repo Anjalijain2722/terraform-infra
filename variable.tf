@@ -2,8 +2,13 @@ variable "redis_cluster_id" {}
 variable "redis_node_type" {}
 variable "redis_num_nodes" {}
 
+variable "vpc_id" {
+  description = "The ID of the VPC to be deleted"
+  type        = string
+}
+
 variable "region" {
-  default = "us-east-1"
+  default = "ap-south-1"
 }
 
 variable "vpc_cidr" {
