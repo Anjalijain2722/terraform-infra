@@ -4,7 +4,7 @@ resource "aws_elasticache_subnet_group" "redis_subnet_group" {
 }
 
 resource "aws_elasticache_cluster" "redis" {
-  cluster_id          = "redis-cluster", "redis-cluster-1", "redis-cluster-2"
+  cluster_id          = var.selected_cluster_id
   engine              = "redis"
   node_type           = "cache.t3.micro"
   num_cache_nodes     = 1
