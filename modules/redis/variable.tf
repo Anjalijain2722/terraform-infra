@@ -4,9 +4,10 @@ variable "cluster_ids" {
   default     = ["redis-cluster", "redis-cluster-1", "redis-cluster-2"]
 }
 variable "selected_cluster_id" {
-  description = "The selected cluster ID"
+  description = "The ID of the selected Redis cluster"
   type        = string
 }
+
 variable "node_type" {
     description = "The instance type for Redis nodes"
     type        = string
