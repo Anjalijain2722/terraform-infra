@@ -1,4 +1,7 @@
-variable "redis_cluster_id" {}
+variable "selected_cluster_id" {
+  description = "The selected Redis cluster ID"
+  type        = string
+}
 variable "redis_node_type" {}
 variable "redis_num_nodes" {}
 
