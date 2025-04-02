@@ -1,6 +1,6 @@
 module "redis" {
   source = "./modules/redis"
-  cluster_ids      = var.selected_cluster_id
+  selected_cluster_id = var.selected_cluster_ids[count.index]
   node_type        = var.redis_node_type
   num_cache_nodes  = var.redis_num_nodes
 
