@@ -8,6 +8,9 @@ pipeline {
     parameters {
         choice(name: 'RESOURCE_TYPE', choices: ['redis', 'vpc'], description: 'Select the resource to deploy')
     }
+    triggers {
+        githubPush()
+    }
     stages {
         stage('Checkout Code') {
             steps {
