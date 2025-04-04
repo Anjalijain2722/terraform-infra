@@ -10,7 +10,7 @@ data "terraform_remote_state" "vpc" {
   config = {
     bucket = "your-terraform-state-bucket"
     key    = "vpc/terraform.tfstate"
-    region = "your-region"
+    region = "ap-south-1"
   }
 }
 
