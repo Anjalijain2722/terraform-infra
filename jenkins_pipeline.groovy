@@ -20,33 +20,21 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir(WORKSPACE) {
-                    sh 'terraform init'
+                    sh 'terraform init -reconfigure'
                 }
             }
         }
         stage('Terraform Plan') {
             steps {
                 dir(WORKSPACE) {
-                    script {
-                        if (params.RESOURCE_TYPE == 'redis') {
-                            sh 'terraform plan -var="resource=redis"'
-                        } else if (params.RESOURCE_TYPE == 'vpc') {
-                            sh 'terraform plan -var="resource=vpc"'
-                        }
-                    }
+                    sh "terraform plan -var='resource_type=${params.RESOURCE_TYPE}' -var-file=terraform.tfvars"
                 }
             }
         }
         stage('Terraform Apply') {
             steps {
                 dir(WORKSPACE) {
-                    script {
-                        if (params.RESOURCE_TYPE == 'redis') {
-                            sh 'terraform apply -var="resource=redis" -auto-approve'
-                        } else if (params.RESOURCE_TYPE == 'vpc') {
-                            sh 'terraform apply -var="resource=vpc" -auto-approve'
-                        }
-                    }
+                    sh "terraform apply -var='resource_type=${params.RESOURCE_TYPE}' -var-file=terraform.tfvars -auto-approve"
                 }
             }
         }
