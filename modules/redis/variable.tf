@@ -1,18 +1,9 @@
-variable "cluster_id" {
-     description = "The ID of the Redis cluster"
-     type        = string
+variable "subnet_ids" {
+  type = list(string)
+  description = "Subnet IDs to launch Redis cluster"
 }
-variable "node_type" {
-    description = "The instance type for Redis nodes"
-    type        = string
-    default     = "cache.t3.micro"
-}
-variable "num_cache_nodes" {
-    description = "Number of shards in redis cluster node"
-    type = number
-    default = 2
-}
+
 variable "vpc_id" {
-  description = "The ID of the VPC to launch the Redis cluster into"
+  description = "VPC ID (must exist)"
   type        = string
 }
