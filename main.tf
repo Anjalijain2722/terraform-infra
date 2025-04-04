@@ -13,7 +13,6 @@ module "vpc" {
 # Data source to get VPC ID from existing remote state (only when not creating VPC)
 data "terraform_remote_state" "vpc" {
   backend = "s3"
-  count   = lower(var.resource_type) != "vpc" ? 1 : 0
   config = {
     bucket = "reddis-testing-bucket"
     key    = "terraform.tfstate" 
@@ -38,8 +37,9 @@ output "vpc_id" {
 }
 
 output "existing_vpc_id" {
-  value = lower(var.resource_type) == "ElastiCache-Redis" ? data.terraform_remote_state.vpc.outputs.vpc_id : null
-  description = "VPC ID fetched from remote state when resource_type is elasticache-redis"
+  value       = lower(var.resource_type) == "elasticache-redis" ? data.terraform_remote_state.vpc.outputs.vpc_id : null
+  description = "VPC ID from remote state when creating Redis"
 }
+
 
 
