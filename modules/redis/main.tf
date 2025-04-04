@@ -1,13 +1,17 @@
 resource "aws_elasticache_subnet_group" "redis_subnet_group" {
+  count      = var.vpc_id != "" ? 1 : 0
   name       = "redis-subnet-group"
-  subnet_ids = ["subnet-0e4b65bfa1fc25815", "subnet-0670f6f8429aeb5ef"]  
+  subnet_ids = var.subnet_ids
 }
 
 resource "aws_elasticache_cluster" "redis" {
-  cluster_id          = "redis-cluster"
-  engine              = "redis"
-  node_type           = "cache.t3.micro"
-  num_cache_nodes     = 1
+  count                = var.vpc_id != "" ? 1 : 0
+  cluster_id           = var.cluster_id
+  engine               = "redis"
+  node_type            = var.node_type
+  num_cache_nodes      = var.num_cache_nodes
   parameter_group_name = "default.redis7"
-  subnet_group_name   = aws_elasticache_subnet_group.redis_subnet_group.name
+  subnet_group_name    = aws_elasticache_subnet_group.redis_subnet_group[0].name
+
+  depends_on = [aws_elasticache_subnet_group.redis_subnet_group]
 }
