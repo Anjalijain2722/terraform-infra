@@ -43,7 +43,5 @@ resource "null_resource" "fail_if_no_vpc" {
 
 # Output only when VPC is created
 output "vpc_id" {
-  value       = module.vpc[0].vpc_id
-  description = "VPC ID"
-  condition   = lower(var.resource_type) == "vpc"
+  value = var.resource_type == "vpc" || var.resource_type == "redis" ? module.vpc[0].vpc_id : null
 }
