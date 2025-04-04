@@ -12,5 +12,7 @@ variable "num_cache_nodes" {
     type = number
     default = 2
 }
-
-
+variable "vpc_id" {
+  description = "The ID of the VPC to launch the Redis cluster into"
+  type        = string
+}
