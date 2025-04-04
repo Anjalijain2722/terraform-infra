@@ -1,4 +1,4 @@
-variable "resource" {
+variable "resource_type" {
   description = "Select which resource to deploy: 'vpc' or 'redis'"
   type        = string
 }
