@@ -1,7 +1,12 @@
-resource "aws_elasticache_subnet_group" "redis_subnet_group" {
-  count      = var.vpc_id != "" ? 1 : 0
-  name       = "redis-subnet-group"
+resource "aws_elasticache_subnet_group" "this" {
+  name       = "${var.cluster_id}-subnet-group"
   subnet_ids = var.subnet_ids
+}
+
+resource "aws_security_group" "redis_sg" {
+  name        = "${var.cluster_id}-sg"
+  description = "Security group for Redis"
+  vpc_id      = var.vpc_id
 }
 
 resource "aws_elasticache_cluster" "redis" {
