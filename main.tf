@@ -24,12 +24,12 @@ data "terraform_remote_state" "vpc" {
 # Redis Module
 module "redis" {
   source = "./modules/redis"
-  count  = lower(var.resource_type) == "ElastiCache-Redis" && data.terraform_remote_state.vpc.outputs.vpc_id != "" ? 1 : 0
+  count  = lower(var.resource_type) == "redis" || lower(var.resource_type) == "ElastiCache-Redis" ? 1 : 0
 
   cluster_id       = var.redis_cluster_id
   node_type        = var.redis_node_type
   num_cache_nodes  = var.redis_num_nodes
-  vpc_id           = data.terraform_remote_state.vpc.outputs.vpc_id
+  vpc_id           = var.vpc_id
 }
 
 # Error handling: If Redis is selected but no VPC output found
