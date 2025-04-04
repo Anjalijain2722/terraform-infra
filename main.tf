@@ -6,7 +6,7 @@ variable "resource_type" {
 module "vpc" {
   source   = "./modules/vpc"
   count    = var.resource_type == "vpc" || var.resource_type == "redis" ? 1 : 0
-  region   = var.region
+  region   = "ap-south-1"
   vpc_cidr = var.vpc_cidr
   vpc_name = var.vpc_name
 }
