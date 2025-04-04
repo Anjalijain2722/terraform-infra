@@ -1,10 +1,10 @@
 provider "aws" {
-  region = "ap-south-1"
+  region = var.region
 }
 
 module "vpc" {
   source   = "./modules/vpc"
-  count    = var.resource_type == "vpc" || var.resource_type == "redis" ? 1 : 0
+  count    = lower(var.resource_type) == "vpc" || lower(var.resource_type) == "redis" ? 1 : 0
   vpc_cidr = var.vpc_cidr
   vpc_name = var.vpc_name
 }
