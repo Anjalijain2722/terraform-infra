@@ -29,7 +29,7 @@ module "redis" {
   cluster_id       = var.redis_cluster_id
   node_type        = var.redis_node_type
   num_cache_nodes  = var.redis_num_nodes
-  vpc_id           = var.vpc_id
+  vpc_id           = module.vpc[0].vpc_id
 }
 
 # Error handling: If Redis is selected but no VPC output found
