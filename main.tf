@@ -1,12 +1,12 @@
-# VPC creation
+# VPC creation (always included, actual resource creation controlled via create_vpc flag)
 module "vpc" {
-  source   = "./modules/vpc"
-  count    = lower(var.resource_type) == "vpc" ? 1 : 0
-  vpc_cidr = var.vpc_cidr
-  vpc_name = var.vpc_name
+  source     = "./modules/vpc"
+  create_vpc = var.create_vpc
+  vpc_cidr   = var.vpc_cidr
+  vpc_name   = var.vpc_name
 }
 
-# Remote VPC state
+# Remote VPC state for Redis (used only if resource_type == "redis")
 data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {
@@ -16,14 +16,20 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
-# Conditional logic to get values
+# Logic to choose whether to use remote or module VPC
 locals {
   use_existing_vpc = lower(var.resource_type) == "redis"
-  vpc_id           = local.use_existing_vpc ? data.terraform_remote_state.vpc.outputs.vpc_id : (length(module.vpc) > 0 ? module.vpc[0].vpc_id : "")
-  subnet_ids       = local.use_existing_vpc ? data.terraform_remote_state.vpc.outputs.subnet_ids : (length(module.vpc) > 0 ? module.vpc[0].subnet_ids : [])
+
+  vpc_id = local.use_existing_vpc
+    ? data.terraform_remote_state.vpc.outputs.vpc_id
+    : module.vpc.vpc_id
+
+  subnet_ids = local.use_existing_vpc
+    ? data.terraform_remote_state.vpc.outputs.subnet_ids
+    : module.vpc.subnet_ids
 }
 
-# Redis module
+# Redis Module (only included if resource_type == "redis")
 module "redis" {
   source          = "./modules/redis"
   count           = lower(var.resource_type) == "redis" ? 1 : 0
