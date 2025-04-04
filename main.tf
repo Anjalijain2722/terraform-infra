@@ -23,7 +23,7 @@ data "terraform_remote_state" "vpc" {
 # Redis Module (use existing VPC)
 module "redis" {
   source = "./modules/redis"
-  count  = lower(var.resource_type) == "redis" || lower(var.resource_type) == "ElastiCache-Redis" ? 1 : 0
+  count  = count = contains(["redis", "elasticache-redis"], lower(var.resource_type)) ? 1 : 0
   cluster_id       = var.redis_cluster_id
   node_type        = var.redis_node_type
   num_cache_nodes  = var.redis_num_nodes
@@ -37,9 +37,10 @@ output "vpc_id" {
 }
 
 output "existing_vpc_id" {
-  value       = lower(var.resource_type) == "elasticache-redis" ? data.terraform_remote_state.vpc.outputs.vpc_id : null
+  value       = contains(["redis", "elasticache-redis"], lower(var.resource_type)) ? data.terraform_remote_state.vpc.outputs.vpc_id : null
   description = "VPC ID from remote state when creating Redis"
 }
+
 
 
 
