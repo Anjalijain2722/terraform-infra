@@ -28,9 +28,9 @@ pipeline {
                     echo ">> Running terraform init with reconfigure"
                     sh '''
                         terraform init -reconfigure \
-                          -backend-config="bucket=your-terraform-state-bucket" \
+                          -backend-config="bucket=redis-testing-bucket" \
                           -backend-config="key=global/terraform.tfstate" \
-                          -backend-config="region=your-region"
+                          -backend-config="region=ap-south-1"
                     '''
                 }
             }
