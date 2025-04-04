@@ -24,7 +24,7 @@ data "terraform_remote_state" "vpc" {
 # Redis Module
 module "redis" {
   source = "./modules/redis"
-  count  = lower(var.resource_type) == "redis" && data.terraform_remote_state.vpc.outputs.vpc_id != "" ? 1 : 0
+  count  = lower(var.resource_type) == "ElastiCache-Redis" && data.terraform_remote_state.vpc.outputs.vpc_id != "" ? 1 : 0
 
   cluster_id       = var.redis_cluster_id
   node_type        = var.redis_node_type
@@ -34,7 +34,7 @@ module "redis" {
 
 # Error handling: If Redis is selected but no VPC output found
 resource "null_resource" "fail_if_no_vpc" {
-  count = lower(var.resource_type) == "redis" && data.terraform_remote_state.vpc.outputs.vpc_id == "" ? 1 : 0
+  count = lower(var.resource_type) == "ElastiCache-Redis" && data.terraform_remote_state.vpc.outputs.vpc_id == "" ? 1 : 0
 
   provisioner "local-exec" {
     command = "echo 'ERROR: No VPC found. Please create the VPC first using resource_type = vpc' && exit 1"
