@@ -23,7 +23,7 @@ module "redis" {
 
 # Error if Redis selected and VPC is missing
 resource "null_resource" "check_vpc_exists" {
-  count = var.resource == "redis" && try(data.terraform_remote_state.vpc.outputs.vpc_id, "") == "" ? 1 : 0
+  count = var.resource_type == "redis" && try(data.terraform_remote_state.vpc.outputs.vpc_id, "") == "" ? 1 : 0
 
   provisioner "local-exec" {
     command = "echo 'ERROR: VPC not found. Please create VPC first.' && exit 1"
