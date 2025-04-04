@@ -20,10 +20,11 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir(WORKSPACE) {
-                    sh 'terraform init -reconfigure'
-                }
+                echo ">> Running terraform init with reconfigure"
+                sh 'terraform init -reconfigure'
             }
         }
+    }
         stage('Terraform Plan') {
             steps {
                 dir(WORKSPACE) {
