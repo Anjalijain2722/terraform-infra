@@ -1,10 +1,3 @@
-variable "cluster_id" {}
-variable "node_type" {}
-variable "num_cache_nodes" {}
-variable "subnet_ids" {
-  type = list(string)
-}
-
 resource "aws_elasticache_subnet_group" "redis_subnet_group" {
   name       = "${var.cluster_id}-subnet-group"
   subnet_ids = var.subnet_ids
