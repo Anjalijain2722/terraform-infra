@@ -22,12 +22,13 @@ locals {
 
   vpc_id = local.use_existing_vpc
     ? data.terraform_remote_state.vpc.outputs.vpc_id
-    : module.vpc.vpc_id
+    : try(module.vpc.vpc_id, "")
 
   subnet_ids = local.use_existing_vpc
     ? data.terraform_remote_state.vpc.outputs.subnet_ids
-    : module.vpc.subnet_ids
+    : try(module.vpc.subnet_ids, [])
 }
+
 
 # Redis Module (only included if resource_type == "redis")
 module "redis" {
