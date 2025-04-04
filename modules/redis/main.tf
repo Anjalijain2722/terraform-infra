@@ -10,8 +10,5 @@ resource "aws_elasticache_cluster" "redis" {
   num_cache_nodes      = var.num_cache_nodes
   subnet_group_name    = aws_elasticache_subnet_group.redis_subnet_group.name
 
-  depends_on = [
-    aws_elasticache_subnet_group.redis_subnet_group,
-    data.terraform_remote_state.vpc
-  ]
+ depends_on = [aws_elasticache_subnet_group.redis_subnet_group]
 }
