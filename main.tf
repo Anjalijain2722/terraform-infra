@@ -1,5 +1,5 @@
 module "vpc" {
-  count   = var.resource_type == "vpc" ? 1 : 0
+  count   = var.resource == "vpc" ? 1 : 0
   source  = "./modules/vpc"
   vpc_cidr_block = var.vpc_cidr_block
 }
