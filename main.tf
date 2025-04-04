@@ -23,6 +23,14 @@ locals {
   subnet_ids       = local.use_existing_vpc ? data.terraform_remote_state.vpc.outputs.subnet_ids : (length(module.vpc) > 0 ? module.vpc[0].subnet_ids : [])
 }
 
+data "terraform_remote_state" "vpc" {
+  backend = "s3"
+  config = {
+    bucket = "your-terraform-state-bucket"
+    key    = "vpc/terraform.tfstate" # Make sure this path is correct
+    region = "ap-south-1"
+  }
+}
 # Redis module
 module "redis" {
   source          = "./modules/redis"
