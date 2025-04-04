@@ -15,7 +15,7 @@ data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {
     bucket = "reddis-testing-bucket"
-    key    = "project/infrastructure.tfstate"
+    key    = "terraform.tfstate" 
     region = "ap-south-1"
   }
 }
