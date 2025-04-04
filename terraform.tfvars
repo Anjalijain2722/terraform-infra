@@ -1,8 +1,4 @@
-resource_type       = "ElastiCache-Redis" # or "vpc"
-region              = "ap-south-1"
-vpc_cidr            = "10.0.0.0/16"
-vpc_name            = "my-vpc"
+resource       = "vpc"
+vpc_cidr_block = "10.0.0.0/16"
+subnet_ids     = ["subnet-0123456789abcdef0", "subnet-0abcdef1234567890"]
 
-redis_cluster_id    = "my-redis-cluster"
-redis_node_type     = "cache.t3.micro"
-redis_num_nodes     = 1
