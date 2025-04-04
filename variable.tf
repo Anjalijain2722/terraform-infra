@@ -1,3 +1,7 @@
+variable "create_vpc" {
+  type    = bool
+  default = true
+}
 variable "resource_type" {
   type        = string
   description = "Type of resource to create: vpc or redis"
