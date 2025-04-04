@@ -1,7 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "reddis-testing-bucket"
-    key    = "vpc/terraform.tfstate"
+    bucket = "your-terraform-state-bucket"
+    key    = "global/terraform.tfstate"
     region = "ap-south-1"
   }
 }
+
