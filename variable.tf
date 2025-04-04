@@ -1,9 +1,19 @@
-variable "resource_type" {
-  type = string
-  description = "Resource to create: vpc or redis"
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
 
-  validation {
-    condition     = contains(["vpc", "redis"], lower(var.resource_type))
-    error_message = "resource_type must be either 'vpc' or 'redis'"
-  }
+variable "redis_cluster_id" {
+  description = "Redis cluster ID"
+  type        = string
+}
+
+variable "redis_node_type" {
+  description = "Type of Redis node"
+  type        = string
+}
+
+variable "redis_num_nodes" {
+  description = "Number of Redis cache nodes"
+  type        = number
 }
