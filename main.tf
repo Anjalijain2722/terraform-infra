@@ -23,7 +23,7 @@ data "terraform_remote_state" "vpc" {
 # Redis Module (use existing VPC)
 module "redis" {
   source = "./modules/redis"
-  count  = count = contains(["redis", "elasticache-redis"], lower(var.resource_type)) ? 1 : 0
+  count = contains(["redis", "elasticache-redis"], lower(var.resource_type)) ? 1 : 0
   cluster_id       = var.redis_cluster_id
   node_type        = var.redis_node_type
   num_cache_nodes  = var.redis_num_nodes
