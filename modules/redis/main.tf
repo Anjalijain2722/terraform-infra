@@ -11,3 +11,6 @@ resource "aws_elasticache_cluster" "redis" {
   parameter_group_name = "default.redis7"
   subnet_group_name   = aws_elasticache_subnet_group.redis_subnet_group.name
 }
+tags = {
+  "VPC" = var.vpc_id
+}
