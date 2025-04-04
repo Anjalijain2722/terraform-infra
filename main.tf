@@ -27,7 +27,7 @@ module "redis" {
   cluster_id       = var.redis_cluster_id
   node_type        = var.redis_node_type
   num_cache_nodes  = var.redis_num_nodes
-  vpc_id           = lower(var.resource_type) == "vpc" ? module.vpc[0].vpc_id : data.terraform_remote_state.vpc[0].outputs.vpc_id
+  vpc_id = lower(var.resource_type) == "vpc" ? module.vpc[0].vpc_id : data.terraform_remote_state.vpc.outputs.vpc_id
 }
 
 # Output only when VPC is created
