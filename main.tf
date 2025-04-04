@@ -29,6 +29,8 @@ data "terraform_remote_state" "vpc" {
     bucket = "your-terraform-state-bucket"
     key    = "vpc/terraform.tfstate" # Make sure this path is correct
     region = "ap-south-1"
+    vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
+
   }
 }
 # Redis module
