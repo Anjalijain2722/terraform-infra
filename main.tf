@@ -43,5 +43,5 @@ resource "null_resource" "fail_if_no_vpc" {
 
 # Output only when VPC is created
 output "vpc_id" {
-  value = var.resource_type == "vpc" || var.resource_type == "redis" ? module.vpc[0].vpc_id : null
+  value = var.resource_type == "vpc" || var.resource_type == "ElastiCache-Redis" ? module.vpc[0].vpc_id : null
 }
