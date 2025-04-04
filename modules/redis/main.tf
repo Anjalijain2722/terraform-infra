@@ -9,12 +9,8 @@ resource "aws_elasticache_cluster" "redis" {
   node_type            = var.node_type
   num_cache_nodes      = var.num_cache_nodes
   subnet_group_name    = aws_elasticache_subnet_group.redis_subnet_group.name
-  parameter_group_name = "default.redis7"
-  port                 = 6379
 
-  depends_on = [aws_elasticache_subnet_group.redis_subnet_group]
-
-  tags = {
-    Name = var.cluster_id
-  }
+  depends_on = [
+    aws_elasticache_subnet_group.redis_subnet_group
+  ]
 }
