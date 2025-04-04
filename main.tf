@@ -8,7 +8,7 @@ module "vpc" {
 data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {
-    bucket = "your-terraform-state-bucket"
+    bucket = "redis-testing-bucket-new"
     key    = "vpc/terraform.tfstate"
     region = "ap-south-1"
   }
