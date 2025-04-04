@@ -33,7 +33,13 @@ module "redis" {
 
 # Output only when VPC is created
 output "vpc_id" {
-  value = lower(var.resource_type) == "vpc" ? module.vpc[0].vpc_id :
-          lower(var.resource_type) == "Elasticache-Redis" ? data.terraform_remote_state.vpc[0].outputs.vpc_id : null
+  value = lower(var.resource_type) == "vpc" ? module.vpc[0].vpc_id : null
+  description = "VPC ID created when resource_type is vpc"
 }
+
+output "existing_vpc_id" {
+  value = lower(var.resource_type) == "ElastiCache-Redis" ? data.terraform_remote_state.vpc.outputs.vpc_id : null
+  description = "VPC ID fetched from remote state when resource_type is elasticache-redis"
+}
+
 
