@@ -12,4 +12,12 @@ variable "num_cache_nodes" {
   type        = number
   description = "The number of Redis nodes"
 }
+variable "vpc_id" {
+  type        = string
+  description = "VPC ID for Redis deployment"
+}
 
+variable "subnet_ids" {
+  type        = list(string)
+  description = "List of subnet IDs for Redis deployment"
+}
