@@ -13,7 +13,6 @@ module "vpc" {
 # Data source to get vpc_id from existing remote state
 data "terraform_remote_state" "vpc" {
   backend = "s3"
-
   config = {
     bucket = "reddis-testing-bucket"
     key    = "project/infrastructure.tfstate"
@@ -25,11 +24,10 @@ data "terraform_remote_state" "vpc" {
 module "redis" {
   source = "./modules/redis"
   count  = lower(var.resource_type) == "redis" || lower(var.resource_type) == "ElastiCache-Redis" ? 1 : 0
-
   cluster_id       = var.redis_cluster_id
   node_type        = var.redis_node_type
   num_cache_nodes  = var.redis_num_nodes
-  vpc_id           = module.vpc[0].vpc_id
+  vpc_id           = data.terraform_remote_state.vpc.outputs.vpc_id
 }
 
 # Error handling: If Redis is selected but no VPC output found
