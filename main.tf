@@ -1,5 +1,5 @@
 module "vpc" {
-  count   = var.resource == "vpc" ? 1 : 0
+  count   = var.resource_type == "vpc" ? 1 : 0
   source  = "./modules/vpc"
   vpc_cidr_block = var.vpc_cidr_block
 }
@@ -15,7 +15,7 @@ data "terraform_remote_state" "vpc" {
 }
 
 module "redis" {
-  count         = var.resource == "redis" ? 1 : 0
+  count         = var.resource_type == "redis" ? 1 : 0
   source        = "./modules/redis"
   subnet_ids    = var.subnet_ids
   vpc_id        = try(data.terraform_remote_state.vpc.outputs.vpc_id, null)
