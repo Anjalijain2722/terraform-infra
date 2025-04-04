@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "ap-south-1"
+}
+
 variable "resource_type" {
   description = "Choose 'vpc' or 'redis'"
   type        = string
