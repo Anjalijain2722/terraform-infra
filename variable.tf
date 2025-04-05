@@ -1,14 +1,16 @@
-variable "region" {
-  default = "ap-south-1"
+variable "resource_type" {}
+variable "vpc_name" {}
+variable "vpc_cidr" {}
+variable "subnet_cidrs" {
+  type = list(string)
+}
+variable "azs" {
+  type = list(string)
 }
 
-variable "vpc_cidr" {
-  default = "10.0.0.0/16"
-}
+variable "redis_cluster_id" {}
+variable "redis_node_type" {}
 
-variable "vpc_name" {
-  default = "my-vpc"
-}
 
 
 
