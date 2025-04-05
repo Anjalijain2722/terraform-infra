@@ -1,15 +1,18 @@
-variable "aws_region" {
-  default = "ap-south-1"
+variable "resource_type" {
+  type        = string
+  description = "Specify what to deploy: VPC or ElastiCache-Redis"
 }
 
-variable "resource_type" {
-  description = "Type of resource to provision"
+variable "aws_region" {
   type        = string
+  description = "AWS region"
+  default     = "ap-south-1"
 }
 
 variable "vpc_cidr_block" {
-  default = "10.0.0.0/16"
+  type        = string
+  description = "CIDR block for VPC"
+  default     = "10.0.0.0/16"
 }
-
 
 
