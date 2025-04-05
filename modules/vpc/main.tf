@@ -22,7 +22,7 @@ resource "aws_subnet" "public" {
   }
 }
 
-resource "aws_security_group" "redis_sg" {
+resource "aws_security_group_ids" "redis_sg" {
   name        = "redis-sg"
   description = "Allow Redis traffic"
   vpc_id      = aws_vpc.main.id
