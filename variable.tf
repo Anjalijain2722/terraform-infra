@@ -8,7 +8,7 @@ variable "create_redis" {
   type        = bool
 }
 
-variable "redis_cluster_id" {}
+variable "cluster_id" {}
 variable "redis_node_type" {}
 variable "redis_num_nodes" {}
 
