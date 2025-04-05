@@ -11,10 +11,35 @@ resource "null_resource" "check_vpc" {
   }
 }
 
-resource "aws_elasticache_subnet_group" "ElastiCache-Redis" {
+resource "aws_elasticache_subnet_group" "redis" {
   name       = "redis-subnet-group"
   subnet_ids = var.subnet_ids
 }
+
+resource "aws_security_group" "redis_sg" {
+  name        = "redis-sg"
+  description = "Allow Redis traffic"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Restrict this in real setup
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "redis-sg"
+  }
+}
+
 
 resource "aws_elasticache_cluster" "ElastiCache-Redis" {
   cluster_id           = "redis-cluster-demo"
