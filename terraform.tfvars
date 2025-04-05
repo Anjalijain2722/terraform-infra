@@ -1,5 +1,5 @@
 create_vpc   = true
-create_redis = true
+create_redis = false
 
 redis_cluster_id = "redis-cluster"
 redis_node_type  = "cache.t2.micro"
