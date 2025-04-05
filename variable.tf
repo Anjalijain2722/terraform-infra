@@ -1,11 +1,13 @@
 variable "resource_type" {
-  description = "Type of resource to create"
+  description = "Specify the resource to create: vpc or ElastiCache-Redis"
   type        = string
 }
 
-variable "vpc_cidr_block" {
-  description = "CIDR block for the VPC"
+variable "region" {
+  description = "AWS Region"
   type        = string
+  default     = "ap-south-1"
 }
+
 
 
