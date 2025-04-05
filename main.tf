@@ -15,7 +15,7 @@ data "terraform_remote_state" "vpc" {
 }
 
 module "redis" {
-  count         = var.resource == "redis" ? 1 : 0
+  count         = var.resource == "ElastiCache-Redis" ? 1 : 0
   source        = "./modules/redis"
   subnet_ids    = var.subnet_ids
   vpc_id        = try(data.terraform_remote_state.vpc.outputs.vpc_id, null)
@@ -23,7 +23,7 @@ module "redis" {
 
 # Error if Redis selected and VPC is missing
 resource "null_resource" "check_vpc_exists" {
-  count = var.resource == "redis" && try(data.terraform_remote_state.vpc.outputs.vpc_id, "") == "" ? 1 : 0
+  count = var.resource == "ElastiCache-Redis" && try(data.terraform_remote_state.vpc.outputs.vpc_id, "") == "" ? 1 : 0
 
   provisioner "local-exec" {
     command = "echo 'ERROR: VPC not found. Please create VPC first.' && exit 1"
