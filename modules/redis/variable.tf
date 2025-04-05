@@ -1,3 +1,8 @@
+variable "resource_type" {
+  description = "Type of resource to create, like ElasticCache-Redis or vpc"
+  type        = string
+}
+
 variable "vpc_id" {
   description = "VPC ID for Redis"
   type        = string
