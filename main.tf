@@ -12,7 +12,7 @@ module "vpc" {
   region = var.region
 
   # Only run if resource_type = "vpc"
-  count = local.is_vpc ? 1 : 0
+  count = var.resource_type == "vpc" ? 1 : 0
 }
 
 data "terraform_remote_state" "vpc" {
