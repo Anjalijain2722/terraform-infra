@@ -14,6 +14,12 @@ variable "vpc_name" {
   default = "my-vpc"
 }
 
+variable "resource_type" {
+  description = "Type of resource to provision: vpc or redis"
+  type        = string
+}
+
+
 
 
 
