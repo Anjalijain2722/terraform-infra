@@ -22,8 +22,8 @@ module "vpc" {
 module "redis" {
   source          = "./modules/redis"
   count           = var.create_redis ? 1 : 0
-  vpc_id          = data.terraform_remote_state.vpc.outputs["vpc_id"]
-  subnet_ids      = data.terraform_remote_state.vpc.outputs["subnet_ids"]
+  vpc_id          = data.terraform_remote_state.vpc.outputs.vpc_id
+  subnet_ids      = data.terraform_remote_state.vpc.outputs.subnet_ids
   cluster_id      = var.cluster_id
   redis_node_type = var.redis_node_type
   redis_num_nodes = var.redis_num_nodes
