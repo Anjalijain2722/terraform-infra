@@ -1,8 +1,3 @@
-variable "resource_type" {
-  type    = string
-  default = "vpc"
-}
-
 locals {
   create_vpc  = var.resource_type == "vpc"
   create_redis = var.resource_type == "redis"
