@@ -6,6 +6,7 @@ provider "aws" {
 module "vpc" {
   source        = "./modules/vpc"
   resource_type = var.resource_type
+  vpc_cidr_block  = var.vpc_cidr_block
   count         = var.resource_type == "vpc" ? 1 : 0
 }
 
