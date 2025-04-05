@@ -1,12 +1,13 @@
-create_vpc   = true
-create_redis = false
+create_vpc   = false
+create_redis = true
 
+region = "ap-south-1"
+
+# Redis-specific
 redis_cluster_id = "redis-cluster"
 redis_node_type  = "cache.t2.micro"
 redis_num_nodes  = 1
 
-vpc_cidr = "10.0.0.0/16"
-vpc_name = "my-vpc"
 
 
 
