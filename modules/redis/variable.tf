@@ -18,6 +18,10 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "subnet_ids" {
+  description = "List of subnet IDs where Redis nodes should be deployed"
+  type        = list(string)
+}
 
 
 
