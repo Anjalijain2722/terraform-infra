@@ -25,4 +25,5 @@ module "redis" {
   count      = var.resource_type == "ElastiCache-Redis" ? 1 : 0
   vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
   subnet_ids = data.terraform_remote_state.vpc.outputs.public_subnet_ids
+  security_group_ids = [data.terraform_remote_state.vpc.outputs.redis_sg_id]
 }
