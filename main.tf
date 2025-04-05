@@ -1,30 +1,24 @@
 terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
+  backend "s3" {
+    bucket = "redis-testing-bucket-new"
+    key    = "terraform.tfstate"
+    region = "ap-south-1"
   }
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = "ap-south-1"
 }
 
-# ──────────────────────────────
-# Create VPC only if resource_type is vpc
-# ──────────────────────────────
+# VPC Module (provision only if resource_type == "vpc")
 module "vpc" {
-  count          = var.resource_type == "vpc" ? 1 : 0
-  source         = "./modules/vpc"
-  vpc_cidr_block = var.vpc_cidr_block
+  source       = "./modules/vpc"
+  resource_type = var.resource_type
+  count        = var.resource_type == "vpc" ? 1 : 0
 }
 
-# ─────────────────────────────────────
-# Use Remote State ONLY when Redis needed
-# ─────────────────────────────────────
+# Remote state reference to fetch existing VPC (used by Redis)
 data "terraform_remote_state" "vpc" {
-  count = var.resource_type == "redis" ? 1 : 0
   backend = "s3"
   config = {
     bucket = "redis-testing-bucket-new"
@@ -33,24 +27,13 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
-# ────────────────────────────────
-# Validate VPC presence for Redis
-# ────────────────────────────────
-resource "null_resource" "check_vpc_state" {
-  count = var.resource_type == "redis" && length(data.terraform_remote_state.vpc) == 0 ? 1 : 0
-
-  provisioner "local-exec" {
-    command = "echo '❌ VPC remote state not found! Redis cannot be provisioned.' && exit 1"
-  }
-}
-
-# ──────────────────────────────
-# Redis Module only if requested
-# ──────────────────────────────
+# Redis Module (provision only if resource_type == "redis")
 module "redis" {
-  count              = var.resource_type == "redis" ? 1 : 0
-  source             = "./modules/redis"
-  vpc_id             = data.terraform_remote_state.vpc[0].outputs.vpc_id
-  subnet_ids         = data.terraform_remote_state.vpc[0].outputs.subnet_ids
-  security_group_ids = data.terraform_remote_state.vpc[0].outputs.security_group_ids
+  source       = "./modules/redis"
+  resource_type = var.resource_type
+  count        = var.resource_type == "redis" ? 1 : 0
+
+  vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
+  subnet_ids = data.terraform_remote_state.vpc.outputs.public_subnet_ids
 }
+
