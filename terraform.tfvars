@@ -1,2 +1,2 @@
-resource_type = "vpc"  # or "redis"
+resource_type = "VPC"  # or "redis"
 region        = "ap-south-1"
