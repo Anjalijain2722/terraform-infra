@@ -20,22 +20,22 @@ module "vpc" {
   vpc_cidr_block  = var.vpc_cidr_block
 }
 
-# ──────────────────────────────────────────────
-# Fetch VPC Remote State if Redis is requested
-# ──────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────────
+# Fetch remote VPC state if Redis is requested (and VPC exists)
+# ──────────────────────────────────────────────────────────────
 data "terraform_remote_state" "vpc" {
   count   = var.resource_type == "redis" ? 1 : 0
   backend = "s3"
   config = {
     bucket = "redis-testing-bucket-new"
-    key    = "vpc/terraform.tfstate"  # Use correct key if stored in subfolder
+    key    = "vpc/terraform.tfstate" # Update if state is stored elsewhere
     region = "ap-south-1"
   }
 }
 
-# ────────────────────────────────
-# Validation to prevent bad deploy
-# ────────────────────────────────
+# ──────────────────────────────────────────────
+# Validate VPC remote state presence for Redis
+# ──────────────────────────────────────────────
 locals {
   vpc_state_missing = (
     var.resource_type == "redis" &&
@@ -61,4 +61,3 @@ module "redis" {
   subnet_ids          = data.terraform_remote_state.vpc[0].outputs.subnet_ids
   security_group_ids  = data.terraform_remote_state.vpc[0].outputs.security_group_ids
 }
-
