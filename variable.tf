@@ -19,7 +19,15 @@ variable "resource_type" {
   type        = string
 }
 
+variable "create_vpc" {
+  description = "Whether to create VPC"
+  type        = bool
+  default     = false
+}
 
-
-
+variable "create_redis" {
+  description = "Whether to create Redis"
+  type        = bool
+  default     = false
+}
 
