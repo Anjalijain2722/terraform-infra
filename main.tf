@@ -32,7 +32,7 @@ module "redis" {
   count = var.resource_type == "ElastiCache-Redis" ? 1 : 0
 
   source             = "./modules/redis"
-  vpc_id             = data.terraform_remote_state.vpc[0].outputs.vpc_id
-  subnet_ids         = data.terraform_remote_state.vpc[0].outputs.subnet_ids
-  security_group_ids = data.terraform_remote_state.vpc[0].outputs.security_group_ids
+  vpc_id             = var.resource_type == "ElastiCache-Redis" ? data.terraform_remote_state.vpc[0].outputs.vpc_id : null
+  subnet_ids         = var.resource_type == "ElastiCache-Redis" ? data.terraform_remote_state.vpc[0].outputs.subnet_ids : null
+  security_group_ids = var.resource_type == "ElastiCache-Redis" ? data.terraform_remote_state.vpc[0].outputs.security_group_ids : null
 }
