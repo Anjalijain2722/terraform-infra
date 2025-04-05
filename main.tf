@@ -1,7 +1,3 @@
-terraform {
-  backend "s3" {}
-}
-
 module "vpc" {
   source      = "./modules/vpc"
   count       = var.resource_type == "vpc" ? 1 : 0
