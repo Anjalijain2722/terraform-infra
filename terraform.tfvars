@@ -1,4 +1,4 @@
-create_vpc   = true
+create_vpc   = false
 create_redis = true
 
 region = "ap-south-1"
