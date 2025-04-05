@@ -8,11 +8,6 @@ variable "create_redis" {
   type        = bool
 }
 
-variable "resource_type" {
-  description = "Type of resource to provision: vpc or redis"
-  type        = string
-}
-
 variable "redis_cluster_id" {}
 variable "redis_node_type" {}
 variable "redis_num_nodes" {}
