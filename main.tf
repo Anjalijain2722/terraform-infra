@@ -1,3 +1,6 @@
+provider "aws" {
+  region = var.region
+}
 locals {
   is_vpc  = var.resource_type == "vpc"
   is_redis = var.resource_type == "ElastiCache-Redis"
