@@ -1,14 +1,11 @@
-resource "aws_subnet" "this" {
-  count             = 2
-  vpc_id            = aws_vpc.this.id
-  cidr_block        = cidrsubnet(var.vpc_cidr_block, 8, count.index)
-  availability_zone = element(["ap-south-1a", "ap-south-1b"], count.index)
+provider "aws" {
+  region = var.region
 }
 
-resource "aws_vpc" "this" {
-  cidr_block = var.vpc_cidr_block
+resource "aws_vpc" "main" {
+  cidr_block = var.vpc_cidr
 
   tags = {
-    Name = "my-vpc"
+    Name = var.vpc_name
   }
 }
