@@ -37,7 +37,7 @@ module "redis" {
   num_cache_nodes   = var.redis_num_nodes
 
   # Pass VPC ID from remote state
-  vpc_id            = data.terraform_remote_state.vpc.outputs.vpc_id
+  vpc_id            = data.terraform_remote_state.vpc[0].outputs.vpc_id
 
   depends_on        = [data.terraform_remote_state.vpc]
 }
