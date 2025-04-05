@@ -1,33 +1,37 @@
-variable "resource_type" {
-  description = "Resource type to provision"
-  type        = string
-}
-
-
 variable "create_vpc" {
-  description = "Whether to create VPC"
-  type        = bool
+  type = bool
 }
 
 variable "create_redis" {
-  description = "Whether to create Redis"
-  type        = bool
+  type = bool
 }
 
-variable "cluster_id" {}
-variable "redis_node_type" {}
-variable "redis_num_nodes" {}
-
 variable "region" {
-  default = "ap-south-1"
+  type = string
+}
+
+# VPC values (only needed if create_vpc is true)
+variable "vpc_name" {
+  type    = string
+  default = ""
 }
 
 variable "vpc_cidr" {
-  default = "10.0.0.0/16"
+  type    = string
+  default = ""
 }
 
-variable "vpc_name" {
-  default = "my-vpc"
+# Redis variables
+variable "cluster_id" {
+  type = string
+}
+
+variable "redis_node_type" {
+  type = string
+}
+
+variable "redis_num_nodes" {
+  type = number
 }
 
 
