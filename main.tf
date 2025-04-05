@@ -2,6 +2,19 @@ provider "aws" {
   region = var.region
 }
 
+locals {
+  is_vpc  = var.resource_type == "vpc"
+  is_redis = var.resource_type == "redis"
+}
+
+module "vpc" {
+  source = "./modules/vpc"
+  region = var.region
+
+  # Only run if resource_type = "vpc"
+  count = local.is_vpc ? 1 : 0
+}
+
 data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {
@@ -9,22 +22,17 @@ data "terraform_remote_state" "vpc" {
     key    = "vpc/terraform.tfstate"
     region = var.region
   }
-}
 
-module "vpc" {
-  source     = "./modules/vpc"
-  count      = var.create_vpc ? 1 : 0
-  region = var.region
-  vpc_name   = var.vpc_name
-  vpc_cidr   = var.vpc_cidr
+  # Only load if creating redis
+  count = local.is_redis ? 1 : 0
 }
 
 module "redis" {
-  source          = "./modules/redis"
-  count           = var.create_redis ? 1 : 0
-  vpc_id          = data.terraform_remote_state.vpc.outputs.vpc_id
-  subnet_ids      = data.terraform_remote_state.vpc.outputs.subnet_ids
-  cluster_id      = var.cluster_id
-  redis_node_type = var.redis_node_type
-  redis_num_nodes = var.redis_num_nodes
+  source     = "./modules/redis"
+  count      = local.is_redis ? 1 : 0
+  region     = var.region
+  vpc_id     = data.terraform_remote_state.vpc[0].outputs.vpc_id
+  subnet_ids = data.terraform_remote_state.vpc[0].outputs.subnet_ids
+  sg_id      = data.terraform_remote_state.vpc[0].outputs.redis_sg_id
 }
+
