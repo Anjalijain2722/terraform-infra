@@ -1,3 +1,5 @@
+variable "vpc_id" {}
+
 resource "aws_elasticache_cluster" "redis" {
   cluster_id          = "redis-cluster"
   engine              = "redis"
