@@ -1,7 +1,5 @@
-data "aws_availability_zones" "available" {}
-
 resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr_block
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -11,27 +9,26 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "public" {
-  count                   = 2
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 4, count.index)
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
-  map_public_ip_on_launch = true
+  count             = 2
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.vpc_cidr_block, 4, count.index)
+  availability_zone = element(["ap-south-1a", "ap-south-1b"], count.index)
 
   tags = {
     Name = "public-subnet-${count.index}"
   }
 }
 
-resource "aws_security_group_ids" "redis_sg" {
+resource "aws_security_group" "redis_sg" {
   name        = "redis-sg"
-  description = "Allow Redis traffic"
   vpc_id      = aws_vpc.main.id
+  description = "Allow Redis traffic"
 
   ingress {
     from_port   = 6379
     to_port     = 6379
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Restrict this in real setup
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -45,6 +42,7 @@ resource "aws_security_group_ids" "redis_sg" {
     Name = "redis-sg"
   }
 }
+
 
 
 
