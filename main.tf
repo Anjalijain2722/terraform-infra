@@ -19,13 +19,13 @@ module "vpc" {
 # Load existing VPC from S3 state (only when Redis is being created)
 data "terraform_remote_state" "vpc" {
   backend = "s3"
-
   config = {
     bucket = "redis-testing-bucket-new"
-    key    = "terraform.tfstate"
-    region = var.region
+    key    = "vpc/terraform.tfstate"
+    region = "ap-south-1"
   }
 }
+
 
 # Redis Module - only created if create_redis = true
 module "redis" {
