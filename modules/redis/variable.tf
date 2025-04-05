@@ -1,28 +1,9 @@
-variable "cluster_id" {
-  description = "The ID for the Redis cluster"
-  type        = string
-}
-
-variable "redis_node_type" {
-  description = "Instance type for Redis"
-  type        = string
-}
-
-variable "redis_num_nodes" {
-  description = "Number of cache nodes"
-  type        = number
-}
-
-variable "vpc_id" {
-  description = "VPC ID where Redis will be launched"
-  type        = string
-}
-
+variable "vpc_id" {}
 variable "subnet_ids" {
-  description = "List of subnet IDs where Redis nodes should be deployed"
-  type        = list(string)
+  type = list(string)
 }
-
+variable "sg_id" {}
+variable "region" {}
 
 
 
