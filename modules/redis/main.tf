@@ -1,3 +1,7 @@
+resource "aws_elasticache_subnet_group" "redis" {
+  name       = "${var.cluster_id}-subnet-group"
+  subnet_ids = var.subnet_ids
+}
 resource "aws_elasticache_cluster" "redis" {
   cluster_id          = "redis-cluster"
   engine              = "redis"
