@@ -1,31 +1,14 @@
 module "vpc" {
-  count   = var.resource == "vpc" ? 1 : 0
-  source  = "./modules/vpc"
-  vpc_cidr_block = var.vpc_cidr_block
-}
+  count = var.resource_type == "vpc" || var.resource_type == "redis" ? 1 : 0
 
-# Load existing VPC ID if it exists
-data "terraform_remote_state" "vpc" {
-  backend = "s3"
-  config = {
-    bucket = "redis-testing-bucket-new"
-    key    = "vpc/terraform.tfstate"
-    region = "ap-south-1"
-  }
+  source = "./modules/vpc"
 }
 
 module "redis" {
-  count         = var.resource == "ElastiCache-Redis" ? 1 : 0
-  source        = "./modules/redis"
-  subnet_ids    = var.subnet_ids
-  vpc_id        = try(data.terraform_remote_state.vpc.outputs.vpc_id, null)
-}
+  count = var.resource_type == "redis" ? 1 : 0
 
-# Error if Redis selected and VPC is missing
-resource "null_resource" "check_vpc_exists" {
-  count = var.resource == "ElastiCache-Redis" && try(data.terraform_remote_state.vpc.outputs.vpc_id, "") == "" ? 1 : 0
-
-  provisioner "local-exec" {
-    command = "echo 'ERROR: VPC not found. Please create VPC first.' && exit 1"
-  }
+  source              = "./modules/redis"
+  vpc_id              = module.vpc[0].vpc_id
+  subnet_ids          = module.vpc[0].subnet_ids
+  security_group_ids  = module.vpc[0].security_group_ids
 }
