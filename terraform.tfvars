@@ -4,7 +4,7 @@ create_redis = true
 region = "ap-south-1"
 
 # Redis-specific
-redis_cluster_id = "redis-cluster"
+cluster_id = "redis-cluster"
 redis_node_type  = "cache.t2.micro"
 redis_num_nodes  = 1
 
