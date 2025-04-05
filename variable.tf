@@ -1,3 +1,18 @@
+variable "create_vpc" {
+  description = "Whether to create VPC"
+  type        = bool
+}
+
+variable "create_redis" {
+  description = "Whether to create Redis"
+  type        = bool
+}
+
+variable "resource_type" {
+  description = "Type of resource to provision: vpc or redis"
+  type        = string
+}
+
 variable "redis_cluster_id" {}
 variable "redis_node_type" {}
 variable "redis_num_nodes" {}
@@ -13,21 +28,3 @@ variable "vpc_cidr" {
 variable "vpc_name" {
   default = "my-vpc"
 }
-
-variable "resource_type" {
-  description = "Type of resource to provision: vpc or redis"
-  type        = string
-}
-
-variable "create_vpc" {
-  description = "Whether to create VPC"
-  type        = bool
-  default     = false
-}
-
-variable "create_redis" {
-  description = "Whether to create Redis"
-  type        = bool
-  default     = false
-}
-
