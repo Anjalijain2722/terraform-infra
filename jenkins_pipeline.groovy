@@ -8,7 +8,7 @@ pipeline {
     }
 
     parameters {
-        choice(name: 'RESOURCE_TYPE', choices: ['vpc', 'redis'], description: 'Select the resource to deploy')
+        choice(name: 'RESOURCE', choices: ['vpc', 'ElastiCache-Redis'], description: 'Select the resource to deploy')
     }
 
     triggers {
@@ -39,8 +39,8 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 dir("${TF_WORKDIR}") {
-                    echo ">> Planning Terraform changes for resource: ${params.RESOURCE_TYPE}"
-                    sh "terraform plan -var='resource=${params.RESOURCE_TYPE}' -var-file=terraform.tfvars"
+                    echo ">> Planning Terraform changes for resource: ${params.RESOURCE}"
+                    sh "terraform plan -var='resource=${params.RESOURCE}' -var-file=terraform.tfvars"
                 }
             }
         }
@@ -48,8 +48,8 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir("${TF_WORKDIR}") {
-                    echo ">> Applying Terraform changes for resource: ${params.RESOURCE_TYPE}"
-                    sh "terraform apply -var='resource=${params.RESOURCE_TYPE}' -var-file=terraform.tfvars -auto-approve"
+                    echo ">> Applying Terraform changes for resource: ${params.RESOURCE}"
+                    sh "terraform apply -var='resource=${params.RESOURCE}' -var-file=terraform.tfvars -auto-approve"
                 }
             }
         }
@@ -57,10 +57,10 @@ pipeline {
 
     post {
         success {
-            echo "Terraform ${params.RESOURCE_TYPE} deployed successfully!"
+            echo "Terraform ${params.RESOURCE} deployed successfully!"
         }
         failure {
-            echo "Terraform ${params.RESOURCE_TYPE} deployment failed."
+            echo "Terraform ${params.RESOURCE} deployment failed."
         }
     }
 }
