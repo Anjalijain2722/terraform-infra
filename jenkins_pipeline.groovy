@@ -4,7 +4,7 @@ pipeline {
     parameters {
         choice(
             name: 'RESOURCE_TYPE',
-            choices: ['vpc', 'ElastiCache-Redis'],
+            choices: ['vpc', 'redis'],
             description: 'Select the resource to provision'
         )
     }
@@ -25,7 +25,10 @@ pipeline {
             steps {
                 sh '''
                     echo "Initializing Terraform..."
-                    terraform init -backend-config="bucket=${BUCKET_NAME}" -backend-config="region=${AWS_REGION}"
+                    terraform init \
+                      -backend-config="bucket=${BUCKET_NAME}" \
+                      -backend-config="region=${AWS_REGION}" \
+                      -backend-config="key=main/terraform.tfstate"
                 '''
             }
         }
@@ -51,7 +54,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 sh '''
-                    echo "Applying Terraform config..."
+                    echo "Applying Terraform config for resource: ${RESOURCE_TYPE}"
                     terraform apply -auto-approve -var="resource_type=${RESOURCE_TYPE}"
                 '''
             }
