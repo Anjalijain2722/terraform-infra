@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 locals {
-  is_vpc  = var.resource_type == "vpc"
-  is_redis = var.resource_type == "redis"
+  is_vpc  = var.resource_type == "VPC"
+  is_redis = var.resource_type == "ElastiCache-Redis"
 }
 
 module "vpc" {
@@ -12,7 +12,7 @@ module "vpc" {
   region = var.region
 
   # Only run if resource_type = "vpc"
-  count = var.resource_type == "vpc" ? 1 : 0
+  count = var.resource_type == "VPC" ? 1 : 0
 }
 
 data "terraform_remote_state" "vpc" {
