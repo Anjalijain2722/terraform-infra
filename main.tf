@@ -30,7 +30,7 @@ data "terraform_remote_state" "vpc" {
 # Redis Module - only created if create_redis = true
 module "redis" {
   source            = "./modules/redis"
-  cluster_id  = var.redis_cluster_id
+  cluster_id  = var.cluster_id
   redis_node_type   = var.redis_node_type
   redis_num_nodes   = var.redis_num_nodes
   vpc_id            = data.terraform_remote_state.vpc.outputs.vpc_id
