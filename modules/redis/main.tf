@@ -13,3 +13,14 @@ resource "aws_elasticache_cluster" "redis" {
   security_group_ids   = var.security_group_ids
 }
 
+locals {
+  vpc_valid = var.vpc_id != ""
+}
+
+resource "null_resource" "check_vpc" {
+  count = local.vpc_valid ? 0 : 1
+
+  provisioner "local-exec" {
+    command = "echo 'ERROR: VPC is required for Redis. Please create a VPC first.' && exit 1"
+  }
+}
