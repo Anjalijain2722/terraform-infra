@@ -1,32 +1,18 @@
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.vpc_cidr_block
 }
 
-resource "aws_subnet" "subnet" {
-  count             = 2
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.${count.index}.0/24"
-  availability_zone = element(["ap-south-1a", "ap-south-1b"], count.index)
+resource "aws_subnet" "public" {
+  count                   = 2
+  cidr_block              = cidrsubnet(var.vpc_cidr_block, 8, count.index)
+  vpc_id                  = aws_vpc.main.id
+  availability_zone       = element(["ap-south-1a", "ap-south-1b"], count.index)
+  map_public_ip_on_launch = true
 }
 
-resource "aws_security_group" "sg" {
-  name        = "redis-sg"
-  vpc_id      = aws_vpc.main.id
-  description = "Allow redis"
-
-  ingress {
-    from_port   = 6379
-    to_port     = 6379
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_security_group" "vpc_sg" {
+  vpc_id = aws_vpc.main.id
 }
+
 
 
