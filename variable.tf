@@ -12,6 +12,10 @@ variable "cluster_id" {}
 variable "redis_node_type" {}
 variable "redis_num_nodes" {}
 
+variable "vpc_id" {
+  description = "Existing VPC ID to use for Redis cluster"
+  type        = string
+}
 variable "region" {
   default = "ap-south-1"
 }
@@ -23,3 +27,5 @@ variable "vpc_cidr" {
 variable "vpc_name" {
   default = "my-vpc"
 }
+
+
