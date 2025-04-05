@@ -1,22 +1,37 @@
 locals {
-  create_vpc   = var.resource_type == "vpc"
-  create_redis = var.resource_type == "redis"
+  is_vpc   = var.resource_type == "vpc"
+  is_redis = var.resource_type == "redis"
 }
 
-# VPC Module
+# VPC provisioning block
 module "vpc" {
-  source = "./modules/vpc"
-  count  = local.create_vpc ? 1 : 0
-
-  cidr_block = "10.0.0.0/16"
+  count    = local.is_vpc ? 1 : 0
+  source   = "./module/vpc"
+  region   = var.region
+  vpc_cidr = var.vpc_cidr
+  vpc_name = var.vpc_name
 }
 
-# Only include this block if Redis is being deployed
-module "redis" {
-  source     = "./modules/redis"
-  count      = local.create_redis ? 1 : 0
+# Read existing VPC from remote state (required for Redis)
+data "terraform_remote_state" "vpc" {
+  count   = local.is_redis ? 1 : 0
+  backend = "s3"
 
-  cluster_id  = local.create_redis ? "redis-test" : null
-  node_type   = local.create_redis ? "cache.t3.micro" : null
-  subnet_ids  = local.create_redis ? data.terraform_remote_state.vpc[0].outputs.subnet_ids : []
+  config = {
+    bucket = "reddis-testing-bucket-new"
+    key    = "terraform.tfstate"
+    region = var.region
+  }
+}
+
+# Redis provisioning block
+module "redis" {
+  count             = local.is_redis ? 1 : 0
+  source            = "./module/redis"
+  cluster_id        = var.redis_cluster_id
+  node_type         = var.redis_node_type
+  num_cache_nodes   = var.redis_num_nodes
+
+  # Optional: Example to demonstrate dependency (won’t be used directly)
+  depends_on = [data.terraform_remote_state.vpc]
 }
