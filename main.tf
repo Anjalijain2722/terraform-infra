@@ -1,5 +1,3 @@
-variable "resource_type" {}
-
 module "vpc" {
   count  = var.resource_type == "vpc" ? 1 : 0
   source = "./modules/vpc"
