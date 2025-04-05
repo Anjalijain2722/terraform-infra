@@ -1,3 +1,6 @@
+provider "aws" {
+  region = var.region
+}
 locals {
   deploy_vpc   = var.create_vpc
   deploy_redis = var.create_redis
