@@ -7,11 +7,11 @@ locals {
 }
 
 module "vpc" {
-  source         = "./modules/vpc"
-  vpc_cidr_block = "10.0.0.0/16"
-  count          = local.is_vpc ? 1 : 0
+  source    = "./modules/vpc"
+  region    = var.region
+  vpc_cidr  = var.vpc_cidr
+  vpc_name  = var.vpc_name
 }
-
 
 data "terraform_remote_state" "vpc" {
   count   = local.is_redis ? 1 : 0
