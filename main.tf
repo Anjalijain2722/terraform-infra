@@ -1,11 +1,11 @@
 module "vpc" {
-  count = var.resource_type == "vpc" || var.resource_type == "redis" ? 1 : 0
+  count = var.resource_type == "vpc" || var.resource_type == "ElastiCache-Redis" ? 1 : 0
 
   source = "./modules/vpc"
 }
 
 module "redis" {
-  count = var.resource_type == "redis" ? 1 : 0
+  count = var.resource_type == "ElastiCache-Redis" ? 1 : 0
 
   source              = "./modules/redis"
   vpc_id              = module.vpc[0].vpc_id
