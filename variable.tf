@@ -1,3 +1,9 @@
+variable "resource_type" {
+  description = "Resource type to provision"
+  type        = string
+}
+
+
 variable "create_vpc" {
   description = "Whether to create VPC"
   type        = bool
