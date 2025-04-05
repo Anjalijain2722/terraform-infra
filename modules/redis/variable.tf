@@ -1,5 +1,14 @@
-variable "vpc_id" {}
-variable "subnet_ids" {}
-variable "security_group_ids" {}
+variable "vpc_id" {
+  type = string
+}
+
+variable "subnet_ids" {
+  type = list(string)
+}
+
+variable "security_group_ids" {
+  type = list(string)
+}
+
 
 
