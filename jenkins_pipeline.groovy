@@ -1,66 +1,69 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_ACCESS_KEY_ID     = credentials('AWS-ACCESS-KEYS')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS-SECRET-KEYS')
-        TF_WORKDIR            = "${WORKSPACE}"
-    }
-
     parameters {
-        choice(name: 'RESOURCE', choices: ['vpc', 'ElastiCache-Redis'], description: 'Select the resource to deploy')
+        choice(
+            name: 'RESOURCE_TYPE',
+            choices: ['vpc', 'ElastiCache-Redis'],
+            description: 'Select the resource to provision'
+        )
     }
 
-    triggers {
-        githubPush()
+    environment {
+        AWS_REGION = "ap-south-1"
+        BUCKET_NAME = "redis-testing-bucket-new"
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/Anjalijain2722/terraform-infra.git'
+                checkout scm
             }
         }
 
         stage('Terraform Init') {
             steps {
-                dir("${TF_WORKDIR}") {
-                    echo ">> Running terraform init with reconfigure"
-                    sh '''
-                        terraform init -reconfigure \
-                          -backend-config="bucket=redis-testing-bucket" \
-                          -backend-config="key=global/terraform.tfstate" \
-                          -backend-config="region=ap-south-1"
-                    '''
-                }
+                sh '''
+                    echo "Initializing Terraform..."
+                    terraform init -backend-config="bucket=${BUCKET_NAME}" -backend-config="region=${AWS_REGION}"
+                '''
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                sh '''
+                    echo "Validating Terraform code..."
+                    terraform validate
+                '''
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                dir("${TF_WORKDIR}") {
-                    echo ">> Planning Terraform changes for resource: ${params.RESOURCE}"
-                    sh "terraform plan -var='resource=${params.RESOURCE}' -var-file=terraform.tfvars"
-                }
+                sh '''
+                    echo "Planning with selected resource: ${RESOURCE_TYPE}"
+                    terraform plan -var="resource_type=${RESOURCE_TYPE}"
+                '''
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                dir("${TF_WORKDIR}") {
-                    echo ">> Applying Terraform changes for resource: ${params.RESOURCE}"
-                    sh "terraform apply -var='resource=${params.RESOURCE}' -var-file=terraform.tfvars -auto-approve"
-                }
+                sh '''
+                    echo "Applying Terraform config..."
+                    terraform apply -auto-approve -var="resource_type=${RESOURCE_TYPE}"
+                '''
             }
         }
     }
 
     post {
-        success {
-            echo "Terraform ${params.RESOURCE} deployed successfully!"
-        }
         failure {
-            echo "Terraform ${params.RESOURCE} deployment failed."
+            echo "Terraform execution failed. Please check logs."
+        }
+        success {
+            echo "Terraform execution succeeded!"
         }
     }
 }
