@@ -14,6 +14,7 @@ data "terraform_remote_state" "vpc" {
 module "vpc" {
   source     = "./modules/vpc"
   count      = var.create_vpc ? 1 : 0
+  region = var.region
   vpc_name   = var.vpc_name
   vpc_cidr   = var.vpc_cidr
 }
@@ -21,7 +22,7 @@ module "vpc" {
 module "redis" {
   source          = "./modules/redis"
   count           = var.create_redis ? 1 : 0
-
+  region = var.region
   vpc_id          = data.terraform_remote_state.vpc.outputs["vpc_id"]
   subnet_ids      = data.terraform_remote_state.vpc.outputs["subnet_ids"]
   cluster_id      = var.cluster_id
