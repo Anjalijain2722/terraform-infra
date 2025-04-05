@@ -1,13 +1,5 @@
-data "terraform_remote_state" "vpc" {
-  count  = local.create_redis ? 1 : 0
-  backend = "s3"
-
-  config = {
-    bucket = "redis-testing-bucket-new"
-    key    = "vpc/terraform.tfstate"
-    region = "ap-south-1"
-  }
-}
-
+redis_cluster_id = "redis-cluster"
+redis_node_type  = "cache.t2.micro"
+redis_num_nodes  = 1
 
 
