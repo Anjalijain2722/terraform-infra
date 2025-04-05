@@ -22,7 +22,8 @@ data "terraform_remote_state" "vpc" {
 }
 
 resource "null_resource" "vpc_check" {
-  count = local.is_redis && (length(data.terraform_remote_state.vpc[0].outputs) == 0 ? 1 : 0)
+  count = local.is_redis && try(data.terraform_remote_state.vpc[0].outputs.vpc_id == "", true) ? 1 : 0
+
   provisioner "local-exec" {
     command = "echo 'VPC not found. Cannot create Redis without VPC.' && exit 1"
   }
