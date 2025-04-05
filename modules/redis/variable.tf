@@ -1,11 +1,5 @@
-variable "region" {
-  type = string
-}
-
-variable "vpc_id" {
-  type = string
-}
-
+variable "cluster_id" {}
+variable "node_type" {}
 variable "subnet_ids" {
   type = list(string)
 }
