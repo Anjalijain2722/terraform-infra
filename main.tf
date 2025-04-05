@@ -31,7 +31,6 @@ data "terraform_remote_state" "vpc" {
 module "redis" {
   count             = var.create_redis ? 1 : 0
   source            = "./modules/redis"
-  region            = var.region
   redis_cluster_id  = var.redis_cluster_id
   redis_node_type   = var.redis_node_type
   redis_num_nodes   = var.redis_num_nodes
