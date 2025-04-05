@@ -12,14 +12,14 @@ data "terraform_remote_state" "vpc" {
 }
 
 module "vpc" {
-  source     = "./module/vpc"
+  source     = "./modules/vpc"
   count      = var.create_vpc ? 1 : 0
   vpc_name   = var.vpc_name
   vpc_cidr   = var.vpc_cidr
 }
 
 module "redis" {
-  source          = "./module/redis"
+  source          = "./modules/redis"
   count           = var.create_redis ? 1 : 0
 
   vpc_id          = data.terraform_remote_state.vpc.outputs["vpc_id"]
