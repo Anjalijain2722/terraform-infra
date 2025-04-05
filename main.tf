@@ -1,8 +1,3 @@
-variable "resource_type" {
-  type    = string
-  default = ""
-}
-
 module "vpc" {
   count  = var.resource_type == "vpc" || var.resource_type == "ElastiCache-Redis" ? 1 : 0
   source = "./modules/vpc"
