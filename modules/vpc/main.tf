@@ -7,4 +7,8 @@ resource "aws_subnet" "this" {
 
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr_block
+
+  tags = {
+    Name = "my-vpc"
+  }
 }
