@@ -1,5 +1,6 @@
 variable "resource_type" {
-  description = "Resource to create: vpc or ElastiCache-Redis"
+  description = "Choose the resource to deploy: vpc or ElastiCache-Redis"
   type        = string
 }
+
 
