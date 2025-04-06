@@ -5,10 +5,6 @@ provider "aws" {
 locals {
   is_vpc   = var.resource_type == "VPC"
   is_redis = var.resource_type == "ElastiCache-Redis"
-
-  vpc_id     = try(data.terraform_remote_state.vpc[0].outputs.vpc_id, null)
-  subnet_ids = try(data.terraform_remote_state.vpc[0].outputs.subnet_ids, [])
-  redis_sg_id = try(data.terraform_remote_state.vpc[0].outputs.redis_sg_id, null)
 }
 
 # VPC Module (provision only if creating VPC)
@@ -27,6 +23,13 @@ data "terraform_remote_state" "vpc" {
     key    = "vpc/terraform.tfstate"
     region = var.region
   }
+}
+
+# Extract values only if remote state is loaded
+locals {
+  vpc_id      = local.is_redis && length(data.terraform_remote_state.vpc) > 0 ? try(data.terraform_remote_state.vpc[0].outputs.vpc_id, null) : null
+  subnet_ids  = local.is_redis && length(data.terraform_remote_state.vpc) > 0 ? try(data.terraform_remote_state.vpc[0].outputs.subnet_ids, []) : []
+  redis_sg_id = local.is_redis && length(data.terraform_remote_state.vpc) > 0 ? try(data.terraform_remote_state.vpc[0].outputs.redis_sg_id, null) : null
 }
 
 # Redis Module (uses remote VPC data)
