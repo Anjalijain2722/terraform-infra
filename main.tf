@@ -1,15 +1,3 @@
-# main.tf
-variable "resource_type" {
-  description = "Resource to create - either vpc or redis"
-  type        = string
-}
-
-variable "region" {
-  description = "AWS region"
-  type        = string
-  default     = "ap-south-1"
-}
-
 locals {
   is_vpc   = var.resource_type == "vpc"
   is_redis = var.resource_type == "ElastiCache-Redis"
