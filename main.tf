@@ -27,7 +27,6 @@ data "terraform_remote_state" "vpc" {
 
 # Extract values only if remote state is loaded
 locals {
-  is_redis = var.resource_type == "ElastiCache-Redis"
   vpc_id      = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.vpc_id, null) : null
   subnet_ids  = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.subnet_ids, []) : []
   redis_sg_id = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.redis_sg_id, null) : null
