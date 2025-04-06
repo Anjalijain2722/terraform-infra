@@ -3,7 +3,7 @@ output "vpc_id" {
 }
 
 output "subnet_ids" {
-  value = [for subnet in aws_subnet.public : subnet.id]
+  value = aws_subnet.public[*].id
 }
 
 output "redis_sg_id" {
