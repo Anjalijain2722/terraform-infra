@@ -8,11 +8,9 @@ locals {
 }
 
 module "vpc" {
+  count = var.resource_type == "VPC" ? 1 : 0
   source = "./modules/vpc"
   region = var.region
-
-  # Only run if resource_type = "vpc"
-  count = var.resource_type == "VPC" ? 1 : 0
 }
 
 data "terraform_remote_state" "vpc" {
