@@ -6,12 +6,12 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_KEYS')     // Store in Jenkins credentials
     }
 
-    stages {
-        stage('Terraform Init') {
-            steps {
-                sh 'terraform init'
-            }
-        }
+   stage('Terraform Init') {
+    steps {
+        sh 'terraform init -reconfigure'
+    }
+}
+
 
         stage('Terraform Plan') {
             steps {
