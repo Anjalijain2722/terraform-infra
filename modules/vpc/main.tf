@@ -1,3 +1,4 @@
+# modules/vpc/main.tf
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 }
@@ -27,4 +28,16 @@ resource "aws_security_group" "redis_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+output "vpc_id" {
+  value = aws_vpc.main.id
+}
+
+output "subnet_ids" {
+  value = aws_subnet.public[*].id
+}
+
+output "redis_sg_id" {
+  value = aws_security_group.redis_sg.id
 }
