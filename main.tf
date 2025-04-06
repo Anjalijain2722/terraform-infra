@@ -27,9 +27,9 @@ data "terraform_remote_state" "vpc" {
 
 # Extract values only if remote state is loaded
 locals {
-  vpc_id      = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.vpc_id, null) : null
-  subnet_ids  = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.subnet_ids, []) : []
-  redis_sg_id = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.redis_sg_id, null) : null
+  vpc_id      = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.vpc_vpc_id, null) : null
+  subnet_ids  = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.vpc_subnet_ids, []) : []
+  redis_sg_id = local.is_redis && data.terraform_remote_state.vpc[0] != null ? try(data.terraform_remote_state.vpc[0].outputs.vpc_redis_sg_id, null) : null
 }
 
 # Redis Module (uses remote VPC data)
