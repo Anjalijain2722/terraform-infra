@@ -14,8 +14,9 @@ module "vpc" {
   region = var.region
 }
 
-# Load VPC from remote state (always defined, but only used if is_redis)
+# Load VPC from remote state (used only when provisioning Redis)
 data "terraform_remote_state" "vpc" {
+  count = local.is_redis ? 1 : 0
   backend = "s3"
   config = {
     bucket = "redis-testing-bucket-new"
@@ -30,17 +31,17 @@ module "redis" {
   source     = "./modules/redis"
   region     = var.region
 
-  vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
-  subnet_ids = data.terraform_remote_state.vpc.outputs.subnet_ids
-  sg_id      = data.terraform_remote_state.vpc.outputs.redis_sg_id
+  vpc_id     = data.terraform_remote_state.vpc[0].outputs.vpc_id
+  subnet_ids = data.terraform_remote_state.vpc[0].outputs.subnet_ids
+  sg_id      = data.terraform_remote_state.vpc[0].outputs.redis_sg_id
 }
 
 # Optional: Validate VPC exists when provisioning Redis
 resource "null_resource" "validate_remote_vpc" {
   count = local.is_redis && (
-    data.terraform_remote_state.vpc.outputs.vpc_id == "" ||
-    data.terraform_remote_state.vpc.outputs.subnet_ids == [] ||
-    data.terraform_remote_state.vpc.outputs.redis_sg_id == ""
+    data.terraform_remote_state.vpc[0].outputs.vpc_id == "" ||
+    length(data.terraform_remote_state.vpc[0].outputs.subnet_ids) == 0 ||
+    data.terraform_remote_state.vpc[0].outputs.redis_sg_id == ""
   ) ? 1 : 0
 
   provisioner "local-exec" {
