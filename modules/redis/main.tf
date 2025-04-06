@@ -14,3 +14,12 @@ resource "aws_elasticache_subnet_group" "redis_subnet_group" {
   name       = "redis-subnet-group"
   subnet_ids = var.subnet_ids
 }
+
+data "terraform_remote_state" "vpc" {
+  backend = "s3"
+  config = {
+    bucket = "redis-testing-bucket-new"
+    key    = "vpc/terraform.tfstate"
+    region = "ap-south-1"
+  }
+}
