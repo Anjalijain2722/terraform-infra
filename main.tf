@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 locals {
-  is_vpc   = var.resource_type == "VPC"
-  is_redis = var.resource_type == "ElastiCache-Redis"
+  is_vpc   = var.create_vpc
+  is_redis = var.create_redis
 }
 
 # VPC Module (provision only if creating VPC)
