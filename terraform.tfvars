@@ -1,2 +1,2 @@
-resource_type = "ElastiCache-Redis"  # or "vpc"
+resource_type = "vpc"  # or "ElastiCache-Redis"
 region        = "ap-south-1"
