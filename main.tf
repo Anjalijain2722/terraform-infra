@@ -43,6 +43,10 @@ module "redis" {
   sg_id      = local.redis_sg_id
 }
 
+output "debug_subnet_ids" {
+  value = local.subnet_ids
+}
+
 # Optional: Validate VPC exists when provisioning Redis
 resource "null_resource" "validate_remote_vpc" {
   count = local.is_redis && (
