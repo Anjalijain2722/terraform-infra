@@ -6,13 +6,12 @@ locals {
   is_vpc   = var.resource_type == "VPC"
   is_redis = var.resource_type == "ElastiCache-Redis"
 
-  remote_vpc_id_exists     = local.is_redis ? try(data.terraform_remote_state.vpc[0].outputs.vpc_id, "") != "" : false
-  remote_subnets_exist     = local.is_redis ? try(length(data.terraform_remote_state.vpc[0].outputs.subnet_ids), 0) > 0 : false
-  remote_redis_sg_id_exist = local.is_redis ? try(data.terraform_remote_state.vpc[0].outputs.redis_sg_id, "") != "" : false
+  vpc_id     = local.is_redis ? try(data.terraform_remote_state.vpc[0].outputs.vpc_id, "") : ""
+  subnet_ids = local.is_redis ? try(data.terraform_remote_state.vpc[0].outputs.subnet_ids, []) : []
+  redis_sg_id = local.is_redis ? try(data.terraform_remote_state.vpc[0].outputs.redis_sg_id, "") : ""
 
-  is_remote_vpc_valid = local.remote_vpc_id_exists && local.remote_subnets_exist && local.remote_redis_sg_id_exist
+  is_remote_vpc_valid = local.vpc_id != "" && length(local.subnet_ids) > 0 && local.redis_sg_id != ""
 }
-
 
 # VPC Module
 module "vpc" {
@@ -48,6 +47,6 @@ resource "null_resource" "validate_remote_vpc" {
   count = local.is_redis && !local.is_remote_vpc_valid ? 1 : 0
 
   provisioner "local-exec" {
-    command = "echo ' ERROR: Required VPC outputs not found in remote state.' && exit 1"
+    command = "echo '❌ ERROR: Required VPC outputs not found in remote state.' && exit 1"
   }
 }
