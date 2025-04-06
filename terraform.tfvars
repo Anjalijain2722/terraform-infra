@@ -1,4 +1,2 @@
-create_vpc  = true
-create_redis = true
-resource_type = "VPC"  # or "ElastiCache-Redis"
+resource_type = "ElastiCache-Redis"
 region        = "ap-south-1"
