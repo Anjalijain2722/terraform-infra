@@ -16,7 +16,6 @@ module "vpc" {
 
 # Load VPC from remote state (used only when provisioning Redis)
 data "terraform_remote_state" "vpc" {
-  count = local.is_redis ? 1 : 0
   backend = "s3"
   config = {
     bucket = "redis-testing-bucket-new"
@@ -27,9 +26,9 @@ data "terraform_remote_state" "vpc" {
 
 # Extract values only if remote state is loaded
 locals {
-  vpc_id      = local.is_redis && length(data.terraform_remote_state.vpc) > 0 ? try(data.terraform_remote_state.vpc[0].outputs.vpc_id, null) : null
-  subnet_ids  = local.is_redis && length(data.terraform_remote_state.vpc) > 0 ? try(data.terraform_remote_state.vpc[0].outputs.subnet_ids, []) : []
-  redis_sg_id = local.is_redis && length(data.terraform_remote_state.vpc) > 0 ? try(data.terraform_remote_state.vpc[0].outputs.redis_sg_id, null) : null
+  vpc_id      = local.is_redis ? try(data.terraform_remote_state.vpc.outputs.vpc_id, null) : null
+  subnet_ids  = local.is_redis ? try(data.terraform_remote_state.vpc.outputs.subnet_ids, []) : []
+  redis_sg_id = local.is_redis ? try(data.terraform_remote_state.vpc.outputs.redis_sg_id, null) : null
 }
 
 # Redis Module (uses remote VPC data)
